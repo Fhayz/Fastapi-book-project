@@ -7,14 +7,14 @@ RUN apt-get update && apt-get install -y nginx
 # Set working directory
 WORKDIR /app
 
-# Copy your FastAPI app
+# Copy FastAPI app
 COPY . /app
+
+# Copy Nginx configuration
+COPY default.conf /etc/nginx/conf.d/default.conf
 
 # Install dependencies
 RUN pip install --no-cache-dir -r requirements.txt
-
-# Copy Nginx config
-COPY nginx.conf /etc/nginx/nginx.conf
 
 # Expose ports
 EXPOSE 80
