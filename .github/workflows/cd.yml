@@ -3,22 +3,27 @@ name: CD Pipeline
 on:
   push:
     branches:
-      - main
+      - main  # Deploys when you push to main
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Set up Python
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Set Up Python
         uses: actions/setup-python@v2
         with:
           python-version: "3.9"
-      - name: Install dependencies
+
+      - name: Install Dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-      - name: Deploy to server
+
+      - name: Deploy to Server via Git
+        env:
+          SERVER_IP: ${{ secrets.SERVER_IP }}
         run: |
-          # Add your deployment script here
-          echo "Deploying the app..."
+          ssh user@$SERVER_IP "cd /path/to/app && git pull && systemctl restart app"

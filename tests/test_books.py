@@ -61,4 +61,5 @@ def test_delete_book():
 
 def test_fail():
     assert False  # This should fail
-;;;
+
+def ;
