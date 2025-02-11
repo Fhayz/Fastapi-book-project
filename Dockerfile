@@ -1,22 +1,23 @@
-# Use the base image (e.g., Python for FastAPI)
+# Use an official Python image
 FROM python:3.10
 
-# Install dependencies
+# Install Nginx
 RUN apt-get update && apt-get install -y nginx
 
-# Copy the Nginx configuration
-COPY nginx.conf /etc/nginx/nginx.conf
-
-# Install Python dependencies
+# Set working directory
 WORKDIR /app
-COPY requirements.txt /app/
-RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy application files
+# Copy your FastAPI app
 COPY . /app
 
-# Expose port 80
+# Install dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy Nginx config
+COPY nginx.conf /etc/nginx/nginx.conf
+
+# Expose ports
 EXPOSE 80
 
-# Start Nginx and the application
+# Start both Nginx and FastAPI
 CMD service nginx start && uvicorn main:app --host 0.0.0.0 --port 8000
