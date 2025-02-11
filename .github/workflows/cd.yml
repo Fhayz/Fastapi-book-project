@@ -3,7 +3,7 @@ name: CD Pipeline
 on:
   push:
     branches:
-      - main  # Deploys when you push to main
+      - main  # Deploys when pushed to main
 
 jobs:
   deploy:

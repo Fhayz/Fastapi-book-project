@@ -1,18 +1,22 @@
-# official Python runtime as a parent image
-FROM python:3.9-slim
+# Use the base image (e.g., Python for FastAPI)
+FROM python:3.10
 
-# Set the working directory inside the container
-WORKDIR /code
+# Install dependencies
+RUN apt-get update && apt-get install -y nginx
 
-#  To Copy requirements file and install dependencies
-COPY ./requirements.txt /code/requirements.txt
-RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
+# Copy the Nginx configuration
+COPY nginx.conf /etc/nginx/nginx.conf
 
-# To Copy the FastAPI application code
-COPY . /code
+# Install Python dependencies
+WORKDIR /app
+COPY requirements.txt /app/
+RUN pip install --no-cache-dir -r requirements.txt
 
-# To  Expose the port the app runs on
-EXPOSE 8000
+# Copy application files
+COPY . /app
 
-# To Run the FastAPI application with Uvicorn
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Expose port 80
+EXPOSE 80
+
+# Start Nginx and the application
+CMD service nginx start && uvicorn main:app --host 0.0.0.0 --port 8000
