@@ -36,6 +36,8 @@ echo "Starting FastAPI application..."\n\
 exec uvicorn main:app --host 0.0.0.0 --port 8000\n'\
 > /app/start.sh
 
+RUN apt-get update && apt-get install -y gettext
+
 RUN chmod +x /app/start.sh
 
 # Expose the port
